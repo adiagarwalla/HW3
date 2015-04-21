@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.sparse import lil_matrix
+from scipy.sparse import csc_matrix
 from scipy.sparse import csr_matrix
 from sklearn.decomposition import TruncatedSVD
 import pylab as pl
@@ -11,6 +12,7 @@ def main(args):
     trainTripletsFile = open('txTripletsCounts.txt', 'rU')
     trainTriplets = []
     row = []; col = []; dat = []; datBin = []
+    
 
     for line in trainTripletsFile:
         arr = line.split()
@@ -19,19 +21,19 @@ def main(args):
         dat.append(int(float(arr[2])))
         datBin.append(1)
 
-    ACount = csr_matrix((dat, (row, col)), shape=(444075, 444075))
-    ABin = csr_matrix((datBin, (row, col)), shape=(444075, 444075))
-    svd = TruncatedSVD(n_components=25)
-    svd.fit(ABin)
-    #print (svd.explained_variance_ratio_)
+    #ACount = csc_matrix((dat, (row, col)), shape=(444075, 444075)).todense()
+    #ABin = csc_matrix((datBin, (row, col)), shape=(444075, 444075)).todense()
 
-    plt.plot(svd.explained_variance_ratio_)
-    plt.show()
-    
+    #print ACount
+    print ABin
 
+    #U, s, V = np.linalg.svd(ABin, full_matrices=True)
 
-
-
+    # svd = TruncatedSVD(n_components=25)
+    # svd.fit(ABin)
+    # #print (svd.explained_variance_ratio_)
+    # plt.plot(svd.explained_variance_ratio_)
+    # plt.show()
 
 if __name__ == "__main__":
     main(sys.argv[1:])
