@@ -11,7 +11,7 @@ import math
 
 def main(args):
     trainTripletsFile = open('txTripletsCounts.txt', 'rU')
-    trainTriplets = []
+    testTripletsFile = open('testTriplets.txt', 'rU')
     row = []; col = []; dat = []; datBin = []
     
 
@@ -22,21 +22,35 @@ def main(args):
         dat.append(int(float(arr[2])))
         datBin.append(1)
 
+    testRow = []; testCol = []; testDat = []
+
+    for line in testTripletsFile:
+        arr = line.split()
+        testRow.append(int(float(arr[0])))
+        testCol.append(int(float(arr[1])))
+        testDat.append(int(float(arr[2])))
+
+    testBinSparse = csr_matrix((testDat, (testRow, testCol)), shape=(444075, 444075))
+
+
     #ACount = csc_matrix((dat, (row, col)), shape=(444075, 444075)).todense()
     ABin = csc_matrix((datBin, (row, col)), shape=(444075, 444075))
 
     ut, s, vt = sparsesvd(ABin, 11)
+    print ut.shape
+    print s.shape
+    print vt.shape
+    
 
-    print ut
-    print s
-    print vt
+    #print testBinSparse
 
 
+    # print ut
+    # print s
+    # print vt
     #print ACount
     #print ABin
-
     #U, s, V = np.linalg.svd(ABin, full_matrices=True)
-
     # svd = TruncatedSVD(n_components=25)
     # svd.fit(ABin)
     # #print (svd.explained_variance_ratio_)
