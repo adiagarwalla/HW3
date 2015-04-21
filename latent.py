@@ -8,19 +8,18 @@ import math
 def main(args):
     trainTripletsFile = open('txTripletsCounts.txt', 'rU')
     trainTriplets = []
-    bin = np.zeros((444075, 444075)) # Binary matrix 
-    count = np.zeros((444075, 444075)) # Count matrix
- 
+    row = []; col = []; dat = []; datBin = []
+
     for line in trainTripletsFile:
-        trainTriplets.append(line.split())
+        arr = line.split()
+        row.append(int(float(arr[0])))
+        col.append(int(float(arr[1])))
+        dat.append(int(float(arr[2])))
+        datBin.append(1)
 
-    # the last column in trainTripletsFile is always > 0. 
-    for row in trainTriplets:
-        bin[int(float(row[0]))][int(float(row[1]))] = 1
-        count[int(float(row[0]))][int(float(row[1]))] = row[2]
-
-    binSparse = csr_matrix(bin)
-
+    ACount = csr_matrix((dat, (row, col)), shape=(444075, 444075))
+    ABin = csr_matrix((datBin, (row, col)), shape=(444075, 444075))
+    print ABin
 
 if __name__ == "__main__":
     main(sys.argv[1:])
