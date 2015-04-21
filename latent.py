@@ -3,6 +3,7 @@ from scipy.sparse import lil_matrix
 from scipy.sparse import csc_matrix
 from scipy.sparse import csr_matrix
 from sklearn.decomposition import TruncatedSVD
+from sparsesvd import sparsesvd
 import pylab as pl
 import matplotlib.pyplot as plt
 import sys
@@ -22,10 +23,17 @@ def main(args):
         datBin.append(1)
 
     #ACount = csc_matrix((dat, (row, col)), shape=(444075, 444075)).todense()
-    #ABin = csc_matrix((datBin, (row, col)), shape=(444075, 444075)).todense()
+    ABin = csc_matrix((datBin, (row, col)), shape=(444075, 444075))
+
+    ut, s, vt = sparsesvd(ABin, 11)
+
+    print ut
+    print s
+    print vt
+
 
     #print ACount
-    print ABin
+    #print ABin
 
     #U, s, V = np.linalg.svd(ABin, full_matrices=True)
 
