@@ -39,8 +39,13 @@ plot(svd.out$d)
 
 u = svd.out$u
 print(dim(u))
+print(u[1,])
 v = svd.out$v
+print(dim(v))
 d = svd.out$d
+print(dim(d))
+print(d)
+
 prob = rep(0, nrow(test.data))
 for (i in 1:nrow(test.data)) {
   p = sum(u[test.data[i,giver,]]*d*v[test.data[i,receiver]])
