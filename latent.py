@@ -40,6 +40,9 @@ def main(args):
     print ut.shape
     print s.shape
     print vt.shape
+    print np.transpose(ut)
+    print s
+    print np.transpose(vt)
     
 
     #print testBinSparse

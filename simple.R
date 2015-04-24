@@ -40,11 +40,20 @@ plot(svd.out$d)
 u = svd.out$u
 print(dim(u))
 print(u[1,])
+print(u[2,])
+print(u[3,])
+
+
 v = svd.out$v
 print(dim(v))
+print(v[1,])
+print(v[2,])
+print(v[3,])
+print(v[444075,])
+
+
 d = svd.out$d
 print(dim(d))
-print(d)
 
 prob = rep(0, nrow(test.data))
 for (i in 1:nrow(test.data)) {
