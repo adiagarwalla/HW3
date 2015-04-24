@@ -33,34 +33,16 @@ def main(args):
 
     #ACount = csc_matrix((dat, (row, col)), shape=(444075, 444075)).todense()
     ABin = csc_matrix((datBin, (row, col)), shape=(444075, 444075))
-
     ut, s, vt = sparsesvd(ABin, 11)
-    # print ut.shape
-    print s.shape
-    # print vt.shape
-    # print np.transpose(ut)
-    # print s
-    # print np.transpose(vt)
+
+    #What the R code is doing. 
     u = np.transpose(ut)
     v = np.transpose(vt)
     for i in range(numLinesinTest):
         row = u[testRow[i]]
-        col = v[testCol[i]][0]
-        #print col
+        col = v[testCol[i]]
         x = np.multiply(row, s)
         p = np.multiply(x, col)
-        print np.sum(p)
-
-    
-    #print testBinSparse
-    print ABin
-    svd = TruncatedSVD(n_components=11)
-    svd.fit(ABin)
-    print(svd.components_)
-    print(svd.components_.shape)
-    print (svd.explained_variance_ratio_)
-    #plt.plot(svd.explained_variance_ratio_)
-    
 
 if __name__ == "__main__":
     main(sys.argv[1:])
