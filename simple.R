@@ -50,14 +50,32 @@ print(v[1,])
 print(v[2,])
 print(v[3,])
 print(v[444075,])
-
+print(v[17,])
 
 d = svd.out$d
 print(dim(d))
 
 prob = rep(0, nrow(test.data))
 for (i in 1:nrow(test.data)) {
-  p = sum(u[test.data[i,giver,]]*d*v[test.data[i,receiver]])
+  p = sum(u[test.data[i,giver],]*d*v[test.data[i,receiver]])
+  if (i < 10) {
+    print(v[test.data[i,receiver]])
+    print("**")
+    #print(test.data[i,giver])
+    print(u[test.data[i,giver],])
+    print("**")
+    print(d)
+    print("**")
+    print(u[test.data[i,giver],]*d)
+    print("**")
+    print(u[test.data[i,giver],]*d*v[test.data[i,receiver]])
+    print("**")
+    #print(test.data[i,receiver])
+    #print(v[test.data[i,receiver],])
+    #print(i)
+    print(p)
+    print("------")
+  }
   if (p < 0) p = 0
   if (p > 1) p = 1
   prob[i] = p

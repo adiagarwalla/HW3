@@ -12,8 +12,7 @@ import math
 def main(args):
     trainTripletsFile = open('txTripletsCounts.txt', 'rU')
     testTripletsFile = open('testTriplets.txt', 'rU')
-    row = []; col = []; dat = []; datBin = []
-    
+    row = []; col = []; dat = []; datBin = []    
 
     for line in trainTripletsFile:
         arr = line.split()
@@ -24,41 +23,44 @@ def main(args):
 
     testRow = []; testCol = []; testDat = []
 
+    numLinesinTest = 0
     for line in testTripletsFile:
+        numLinesinTest = numLinesinTest + 1
         arr = line.split()
         testRow.append(int(float(arr[0])))
         testCol.append(int(float(arr[1])))
         testDat.append(int(float(arr[2])))
 
-    testBinSparse = csr_matrix((testDat, (testRow, testCol)), shape=(444075, 444075))
-
-
     #ACount = csc_matrix((dat, (row, col)), shape=(444075, 444075)).todense()
     ABin = csc_matrix((datBin, (row, col)), shape=(444075, 444075))
 
     ut, s, vt = sparsesvd(ABin, 11)
-    print ut.shape
+    # print ut.shape
     print s.shape
-    print vt.shape
-    print np.transpose(ut)
-    print s
-    print np.transpose(vt)
-    
-
-    #print testBinSparse
-
-
-    # print ut
+    # print vt.shape
+    # print np.transpose(ut)
     # print s
-    # print vt
-    #print ACount
-    #print ABin
-    #U, s, V = np.linalg.svd(ABin, full_matrices=True)
-    # svd = TruncatedSVD(n_components=25)
-    # svd.fit(ABin)
-    # #print (svd.explained_variance_ratio_)
-    # plt.plot(svd.explained_variance_ratio_)
-    # plt.show()
+    # print np.transpose(vt)
+    u = np.transpose(ut)
+    v = np.transpose(vt)
+    for i in range(numLinesinTest):
+        row = u[testRow[i]]
+        col = v[testCol[i]][0]
+        #print col
+        x = np.multiply(row, s)
+        p = np.multiply(x, col)
+        print np.sum(p)
+
+    
+    #print testBinSparse
+    print ABin
+    svd = TruncatedSVD(n_components=11)
+    svd.fit(ABin)
+    print(svd.components_)
+    print(svd.components_.shape)
+    print (svd.explained_variance_ratio_)
+    #plt.plot(svd.explained_variance_ratio_)
+    
 
 if __name__ == "__main__":
     main(sys.argv[1:])
