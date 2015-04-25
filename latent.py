@@ -55,7 +55,7 @@ def main(args):
 
 
     model = lda.LDA(n_topics=20, n_iter=1, random_state=1)
-    model.fit(ABinLDA)
+    model.fit(ACountLDA)
 
     vocab = []
     for i in range(444075):
