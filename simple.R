@@ -71,8 +71,9 @@ for (i in 1:nrow(test.data)) {
     #print(u[test.data[i,giver],]*d*v[test.data[i,receiver]])
     print("**")
     #print(test.data[i,receiver])
-    print(v[test.data[i,receiver],])
+    #print(v[test.data[i,receiver],])
     #print(i)
+    print(u[test.data[i,giver],]*d*v[test.data[i,receiver],])
     print(p)
     print("------")
   }
