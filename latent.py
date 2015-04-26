@@ -3,6 +3,7 @@ from scipy.sparse import lil_matrix
 from scipy.sparse import csc_matrix
 from scipy.sparse import csr_matrix
 from sklearn.decomposition import TruncatedSVD
+from sklearn.cluster import KMeans
 from sparsesvd import sparsesvd
 import pylab as pl
 import matplotlib.pyplot as plt
@@ -45,34 +46,49 @@ def main(args):
     #     x = np.multiply(row, s)
     #     p = np.multiply(x, col)
 
-    #LDA
     ABinLDA = csr_matrix((datBin, (row, col)), shape=(444075, 444075))
-    ACountLDA = csr_matrix((dat, (row, col)), shape=(444075, 444075))
+    ACountRow = csr_matrix((dat, (row, col)), shape=(444075, 444075))
 
-    # x = lda.utils.matrix_to_lists(ACountLDA)
-    # print x[0].shape
-    # print x[1].shape
+    #Performing LDA--------------------
+    if args[0] == "-l":
+        # x = lda.utils.matrix_to_lists(ACountRow)
+        # print x[0].shape
+        # print x[1].shape
+    
+        model = lda.LDA(n_topics=20, n_iter=1, random_state=1)
+        model.fit(ACountRow)
+    
+        vocab = []
+        for i in range(444075):
+            vocab.append(i)
+    
+        topic_word = model.topic_word_
+        print("type(topic_word): {}".format(type(topic_word)))
+        print("shape: {}".format(topic_word.shape))
+    
+        for n in range(5):
+            sum_pr = sum(topic_word[n,:])
+            print("topic: {} sum: {}".format(n, sum_pr))
+    
+        n = 10
+        for i, topic_dist in enumerate(topic_word):
+            topic_words = np.array(vocab)[np.argsort(topic_dist)][:-(n+1):-1]
+            print topic_words
+    
+    #Performing KMeans-------------------
+    if args[0] == "-k":
+        n_clusters = 10
+        k_means = KMeans(n_clusters)
+        k_means.fit(ACountRow)
+        labels = k_means.labels_
+        centers = k_means.cluster_centers_
 
+        #Printing out the labels for each of the giver addresses
+        for i in range(10):
+            print labels[i]
 
-    model = lda.LDA(n_topics=20, n_iter=1, random_state=1)
-    model.fit(ACountLDA)
-
-    vocab = []
-    for i in range(444075):
-        vocab.append(i)
-
-    topic_word = model.topic_word_
-    print("type(topic_word): {}".format(type(topic_word)))
-    print("shape: {}".format(topic_word.shape))
-
-    for n in range(5):
-        sum_pr = sum(topic_word[n,:])
-        print("topic: {} sum: {}".format(n, sum_pr))
-
-    n = 10
-    for i, topic_dist in enumerate(topic_word):
-        topic_words = np.array(vocab)[np.argsort(topic_dist)][:-(n+1):-1]
-        print topic_words
+        #Printing out the coordinates for the cluster centers
+        print centers
 
 
 if __name__ == "__main__":
