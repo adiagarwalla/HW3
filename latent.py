@@ -23,31 +23,50 @@ def main(args):
         dat.append(int(float(arr[2])))
         datBin.append(1)
 
+    # Test file reading
     testRow = []; testCol = []; testDat = []
-
-    numLinesinTest = 0
     for line in testTripletsFile:
-        numLinesinTest = numLinesinTest + 1
         arr = line.split()
         testRow.append(int(float(arr[0])))
         testCol.append(int(float(arr[1])))
         testDat.append(int(float(arr[2])))
 
-    #ACount = csc_matrix((dat, (row, col)), shape=(444075, 444075)).todense()
-    #ABin = csc_matrix((datBin, (row, col)), shape=(444075, 444075))
-    #ut, s, vt = sparsesvd(ABin, 11)
+    # bag = []
+    # prev = 0
+    # count = 0;
 
-    #What the R code is doing. 
-    # u = np.transpose(ut)
-    # v = np.transpose(vt)
-    # for i in range(numLinesinTest):
-    #     row = u[testRow[i]]
-    #     col = v[testCol[i]]
-    #     x = np.multiply(row, s)
-    #     p = np.multiply(x, col)
+    #adjacency representation
+    # for line in trainTripletsFile:
+    #     arr = line.split()
+    #     if int(float(arr[0])) != prev:
+    #         bag.append(docBag)
+    #         docBag = []
+    #         docBag.append(int(float(arr[1])))
+    #         prev = int(float(arr[0]))
+    #     else:
+    #         if count == 0:
+    #             docBag = []
+    #             docBag.append(int(float(arr[1])))
+    #             count = count + 1
+    #         else:
+    #             docBag.append(int(float(arr[1])))
+
+    # ACount = csc_matrix((dat, (row, col)), shape=(444075, 444075)).todense()
+    # ABin = csc_matrix((datBin, (row, col)), shape=(444075, 444075))
+    # # #ut, s, vt = sparsesvd(ABin, 11)
+
+    # #What the R code is doing. 
+    # # u = np.transpose(ut)
+    # # v = np.transpose(vt)
+    # # for i in range(numLinesinTest):
+    # #     row = u[testRow[i]]
+    # #     col = v[testCol[i]]
+    # #     x = np.multiply(row, s)
+    # #     p = np.multiply(x, col)
 
     ABinLDA = csr_matrix((datBin, (row, col)), shape=(444075, 444075))
     ACountRow = csr_matrix((dat, (row, col)), shape=(444075, 444075))
+    Test = csr_matrix((testDat, (testRow, testCol)), shape=(444075, 444075))
 
     #Performing LDA--------------------
     if args[0] == "-l":
@@ -66,14 +85,57 @@ def main(args):
         print("type(topic_word): {}".format(type(topic_word)))
         print("shape: {}".format(topic_word.shape))
     
-        for n in range(5):
-            sum_pr = sum(topic_word[n,:])
-            print("topic: {} sum: {}".format(n, sum_pr))
+        # Check if the sum across all vocab for a topic is ~1
+        # for n in range(5):
+        #     sum_pr = sum(topic_word[n,:])
+        #     print("topic: {} sum: {}".format(n, sum_pr))
     
-        n = 10
+        n = 15
         for i, topic_dist in enumerate(topic_word):
             topic_words = np.array(vocab)[np.argsort(topic_dist)][:-(n+1):-1]
             print topic_words
+    
+        doc_topic = model.doc_topic_
+        print("type(doc_topic): {}".format(type(doc_topic)))
+        print("shape: {}".format(doc_topic.shape))
+    
+        for n in range(10):
+            print doc_topic[n]
+    
+        model.fit(ACountRow)
+        topic_word = model.topic_word_
+        doc_topic = model.doc_topic_
+    
+        results = []
+    
+        for i, value in enumerate(testRow):
+            sum = 0
+            for k in range(20):
+                sum += doc_topic[i][k] * topic_word[k][testCol[i]]
+            print sum
+            if sum < 0.5:
+                results.append(0)
+            else:
+                results.append(1)
+    
+        count = 0
+        for i, rVal in enumerate(results):
+            if rVal == testDat[i]:
+                count += 1
+    
+        print count
+        # print("type(topic_word): {}".format(type(topic_word)))
+        # print("shape: {}".format(topic_word.shape))
+    
+        # for i, topic_dist in enumerate(topic_word):
+        #     topic_words = np.array(vocab)[np.argsort(topic_dist)][:-(n+1):-1]
+        #     print topic_words
+    
+        # print("type(doc_topic): {}".format(type(doc_topic)))
+        # print("shape: {}".format(doc_topic.shape))
+    
+        # for n in range(10):
+        #   print doc_topic[n]
     
     #Performing KMeans-------------------
     if args[0] == "-k":
