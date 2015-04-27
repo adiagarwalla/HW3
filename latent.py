@@ -2,8 +2,6 @@ import numpy as np
 from scipy.sparse import lil_matrix
 from scipy.sparse import csc_matrix
 from scipy.sparse import csr_matrix
-from sklearn.decomposition import TruncatedSVD
-from sklearn.cluster import KMeans
 from sparsesvd import sparsesvd
 import pylab as pl
 import matplotlib.pyplot as plt
@@ -14,7 +12,9 @@ import lda
 def main(args):
     trainTripletsFile = open('txTripletsCounts.txt', 'rU')
     testTripletsFile = open('testTriplets.txt', 'rU')
-    row = []; col = []; dat = []; datBin = []    
+    row = []; col = []; dat = []; datBin = []  
+    trainMatrix = np.zeros((444075, 444075))
+    binMatrix = np.zeros((444075, 444075))
 
     for line in trainTripletsFile:
         arr = line.split()
@@ -22,6 +22,14 @@ def main(args):
         col.append(int(float(arr[1])))
         dat.append(int(float(arr[2])))
         datBin.append(1)
+        #Manually construting the train,binary matrix
+        trainMatrix[int(float(arr[0]))][int(float(arr[1]))] = int(float(arr[2]))
+        binMatrix[int(float(arr[0]))][int(float(arr[1]))] = 1
+
+    for i in range(444075):
+        if binMatrix[0][i] == 1:
+            print i
+
 
     # Test file reading
     testRow = []; testCol = []; testDat = []
@@ -138,6 +146,8 @@ def main(args):
         #   print doc_topic[n]
     
     #Performing KMeans-------------------
+    #TODO: Try finding best values for k
+    from sklearn.cluster import KMeans
     if args[0] == "-k":
         n_clusters = 10
         k_means = KMeans(n_clusters)
@@ -151,6 +161,18 @@ def main(args):
 
         #Printing out the coordinates for the cluster centers
         print centers
+
+    #NMF - used instead of factor analysis because we run out of memory
+    from sklearn.decomposition import ProjectedGradientNMF
+    if args[0] == "-nmf":
+        nmf = ProjectedGradientNMF(init='random', random_state=0)
+        nmf.fit(ACountRow)
+        print "nmf components: "
+        print nmf.components_
+        print "nmf shape: " + str(nmf.components_.shape)
+        print "nmf reconstruction_err: " + str(nmf.reconstruction_err_)
+
+    
 
 
 if __name__ == "__main__":
