@@ -158,7 +158,7 @@ def main(args):
     #NMF - used instead of factor analysis because we run out of memory
     from sklearn.decomposition import ProjectedGradientNMF
     if args[0] == "-nmf":
-        nmf = ProjectedGradientNMF(init='random', random_state=0)
+        nmf = ProjectedGradientNMF(n_components=1000, init='random', random_state=0, sparseness='data')
         nmf.fit(ACountRow)
         print "nmf components: "
         print nmf.components_
