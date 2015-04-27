@@ -74,34 +74,34 @@ def main(args):
         # print x[0].shape
         # print x[1].shape
     
-        model = lda.LDA(n_topics=20, n_iter=1, random_state=1)
-        model.fit(ACountRow)
+        # model.fit(ACountRow)
     
         vocab = []
         for i in range(444075):
             vocab.append(i)
     
-        topic_word = model.topic_word_
-        print("type(topic_word): {}".format(type(topic_word)))
-        print("shape: {}".format(topic_word.shape))
+        # topic_word = model.topic_word_
+        # print("type(topic_word): {}".format(type(topic_word)))
+        # print("shape: {}".format(topic_word.shape))
     
         # Check if the sum across all vocab for a topic is ~1
         # for n in range(5):
         #     sum_pr = sum(topic_word[n,:])
         #     print("topic: {} sum: {}".format(n, sum_pr))
     
-        n = 15
-        for i, topic_dist in enumerate(topic_word):
-            topic_words = np.array(vocab)[np.argsort(topic_dist)][:-(n+1):-1]
-            print topic_words
+        # n = 15
+        # for i, topic_dist in enumerate(topic_word):
+        #     topic_words = np.array(vocab)[np.argsort(topic_dist)][:-(n+1):-1]
+        #     # print topic_words
     
-        doc_topic = model.doc_topic_
-        print("type(doc_topic): {}".format(type(doc_topic)))
-        print("shape: {}".format(doc_topic.shape))
+        # doc_topic = model.doc_topic_
+        # # print("type(doc_topic): {}".format(type(doc_topic)))
+        # print("shape: {}".format(doc_topic.shape))
     
-        for n in range(10):
-            print doc_topic[n]
+        # for n in range(10):
+        #     # print doc_topic[n]
     
+        model = lda.LDA(n_topics=20, n_iter=100, random_state=1)
         model.fit(ACountRow)
         topic_word = model.topic_word_
         doc_topic = model.doc_topic_
@@ -115,6 +115,7 @@ def main(args):
             results.append(sum)
     
         print results
+        print model.loglikelihood()
         if len(results) != 10000:
             print "lol"
         # print("type(topic_word): {}".format(type(topic_word)))
