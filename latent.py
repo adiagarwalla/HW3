@@ -120,18 +120,11 @@ def main(args):
             sum = 0
             for k in range(20):
                 sum += doc_topic[i][k] * topic_word[k][testCol[i]]
-            print sum
-            if sum < 0.5:
-                results.append(0)
-            else:
-                results.append(1)
+            results.append(sum)
     
-        count = 0
-        for i, rVal in enumerate(results):
-            if rVal == testDat[i]:
-                count += 1
-    
-        print count
+        print results
+        if len(results) != 10000:
+            print "lol"
         # print("type(topic_word): {}".format(type(topic_word)))
         # print("shape: {}".format(topic_word.shape))
     
