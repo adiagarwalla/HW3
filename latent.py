@@ -10,6 +10,9 @@ import matplotlib.pyplot as plt
 import sys
 import math
 import lda
+from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+import heapq
 
 def main(args):
     trainTripletsFile = open('txTripletsCounts.txt', 'rU')
@@ -65,6 +68,7 @@ def main(args):
     # #     p = np.multiply(x, col)
 
     ABinLDA = csr_matrix((datBin, (row, col)), shape=(444075, 444075))
+    print ABinLDA.shape
     ACountRow = csr_matrix((dat, (row, col)), shape=(444075, 444075))
     Test = csr_matrix((testDat, (testRow, testCol)), shape=(444075, 444075))
 
@@ -111,7 +115,7 @@ def main(args):
         for i, value in enumerate(testRow):
             sum = 0
             for k in range(20):
-                sum += doc_topic[i][k] * topic_word[k][testCol[i]]
+                sum += doc_topic[value][k] * topic_word[k][testCol[i]]
             results.append(sum)
     
         print results
@@ -145,6 +149,30 @@ def main(args):
 
         #Printing out the coordinates for the cluster centers
         print centers
+
+    #Performing cosine similarity-----------
+    if args[0] == "-c":
+        tfidf_transformer = TfidfTransformer()
+        tfidf_matrix = tfidf_transformer.fit_transform(ACountRow)
+        print tfidf_matrix.shape
+        results = []
+        for i, value in enumerate(testRow):
+            print value
+            x = cosine_similarity(tfidf_matrix[value:value+1], tfidf_matrix)
+            sum = 0
+            for cos_k in range(444075):
+                if cos_k != value:
+                    # print cos_k, testCol[i]
+                    if ABinLDA[cos_k, testCol[i]] != 0:
+                        sum += x[0][cos_k]
+            results.append(sum / 444074.0)
+
+        for l in range(10000):
+            print results[l]
+            
+        print len(results)
+
+
 
 
 if __name__ == "__main__":
