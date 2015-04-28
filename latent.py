@@ -11,6 +11,7 @@ import lda
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import heapq
+import nimfa
 
 def main(args):
     trainTripletsFile = open('txTripletsCounts.txt', 'rU')
@@ -163,12 +164,34 @@ def main(args):
     #NMF - used instead of factor analysis because we run out of memory
     from sklearn.decomposition import ProjectedGradientNMF
     if args[0] == "-nmf":
-        nmf = ProjectedGradientNMF(n_components=1000, init='random', random_state=0, sparseness='data')
-        nmf.fit(ACountRow)
-        print "nmf components: "
-        print nmf.components_
-        print "nmf shape: " + str(nmf.components_.shape)
-        print "nmf reconstruction_err: " + str(nmf.reconstruction_err_)
+        # nmf = ProjectedGradientNMF(n_components=1000, init='random', random_state=0, sparseness='data')
+        # nmf.fit(ACountRow)
+        # print "nmf components: "
+        # print nmf.components_
+        # print "nmf shape: " + str(nmf.components_.shape)
+        # print "nmf reconstruction_err: " + str(nmf.reconstruction_err_)
+        
+        nmf = nimfa.Nmf(ACountRow)#, max_iter=200, rank=2, update='euclidean', objective='fro')
+        nmf_fit = nmf()
+        
+        #W = nmf_fit.basis()
+        #print('Basis matrix:\n%s' % W.todense())
+        
+        # H = nmf_fit.coef()
+        # print('Mixture matrix:\n%s' % H.todense())
+        
+        #print('Euclidean distance: %5.3f' % nmf_fit.distance(metric='euclidean'))
+        
+        # sm = nmf_fit.summary()
+        # print('Sparseness Basis: %5.3f  Mixture: %5.3f' % (sm['sparseness'][0], sm['sparseness'][1]))
+        # print('Iterations: %d' % sm['n_iter'])
+        #print('Target estimate:\n%s' % np.dot(W.todense(), H.todense()))
+
+    #GMM - don't know if this is the best method but might as well give it a try
+    #Assuming Gaussian is probably not the best idea but what else are we going to do? YOLO
+    if args[0] == "-bmf":
+        bmf = nimfa.Bmf(V, seed="nndsvd", rank=10, max_iter=12, lambda_w=1.1, lambda_h=1.1)
+        bmf_fit = bmf()
 
     #Performing cosine similarity-----------
     if args[0] == "-c":
