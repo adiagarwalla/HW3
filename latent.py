@@ -113,10 +113,10 @@ def main(args):
         results = []
     
         for i, value in enumerate(testRow):
-            sum = 0
+            sumC = 0
             for k in range(20):
-                sum += doc_topic[value][k] * topic_word[k][testCol[i]]
-            results.append(sum)
+                sumC += doc_topic[value][k] * topic_word[k][testCol[i]]
+            results.append(sumC)
     
         print results
         print model.loglikelihood()
@@ -157,20 +157,32 @@ def main(args):
         print tfidf_matrix.shape
         results = []
         for i, value in enumerate(testRow):
-            print value
+            # print value
             x = cosine_similarity(tfidf_matrix[value:value+1], tfidf_matrix)
-            sum = 0
-            for cos_k in range(444075):
+            max_thousand_index = np.argsort(x[0])[-26:][::-1]
+            max_thousand_index_new = max_thousand_index[1:]
+            max_thousand = heapq.nlargest(26, x[0])
+            new_max_thousand = max_thousand[1:]
+            max_thousand_norm = [float(i) / sum(new_max_thousand) for i in new_max_thousand]
+            sumPredict = 0
+            for ind, cos_k in enumerate(max_thousand_index_new):
                 if cos_k != value:
-                    # print cos_k, testCol[i]
-                    if ABinLDA[cos_k, testCol[i]] != 0:
-                        sum += x[0][cos_k]
-            results.append(sum / 444074.0)
+                    # print cos_k, testCol[int(i)]
+                    if ABinLDA[cos_k, testCol[int(i)]] != 0:
+                        sumPredict += max_thousand_norm[ind]
 
+            results.append(sumPredict)
+
+        #             results.append(ABinLDA[max_largest_index[1], testCol[int(i)]])
+        bigCount = 0
         for l in range(10000):
             print results[l]
+            if (results[l] > 0.5):
+                bigCount += 1
             
         print len(results)
+        print bigCount
+        
 
 
 
