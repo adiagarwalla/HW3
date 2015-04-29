@@ -72,6 +72,15 @@ def main(args):
     ACountRow = csr_matrix((dat, (row, col)), shape=(444075, 444075))
     Test = csr_matrix((testDat, (testRow, testCol)), shape=(444075, 444075))
 
+    #Performing LDA over range of topics----------------------
+    if args[0] == "-t":
+        for topics in range(10, 30, 5):
+            model = lda.LDA(n_topics=topics, n_iter=100, random_state=1)
+            model.fit(ACountRow)
+            print topics
+            print model.loglikelihood()
+
+
     #Performing LDA--------------------
     if args[0] == "-l":
         # x = lda.utils.matrix_to_lists(ACountRow)
@@ -122,6 +131,7 @@ def main(args):
         print model.loglikelihood()
         if len(results) != 10000:
             print "lol"
+
         # print("type(topic_word): {}".format(type(topic_word)))
         # print("shape: {}".format(topic_word.shape))
     
