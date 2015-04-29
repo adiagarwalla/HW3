@@ -12,6 +12,40 @@ from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import heapq
 import nimfa
+import pylab as pl
+from scipy import stats
+from scipy.spatial.distance import cdist, pdist
+
+#Function to plot precision_recall curve
+def pr(y_true, y_prob):
+    import numpy as np
+    from sklearn.metrics import precision_recall_curve
+    precision, recall, thresholds = precision_recall_curve(y_true, y_prob)
+    plt.clf()
+    plt.plot(recall, precision, label='Precision-Recall curve')
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.ylim([0.0, 1.05])
+    plt.xlim([0.0, 1.0])
+    plt.legend(loc="lower left")
+    plt.show()
+
+#Function for violinp lot
+def violin_plot(ax,data,groups,bp=False):
+    '''Create violin plot along an axis'''
+    dist = max(groups) - min(groups)
+    w = min(0.15*dist,0.5)
+    for d,p in zip(data,groups):
+        k = stats.gaussian_kde(d) #calculates the kernel density
+        m = k.dataset.min() #lower bound of violin
+        M = k.dataset.max() #upper bound of violin
+        x = np.arange(m,M,(M-m)/100.) # support for violin
+        v = k.evaluate(x) #violin profile (density curve)
+        v = v/v.max()*w #scaling the violin to the available space
+        ax.fill_betweenx(x,p,v+p,facecolor='y',alpha=0.3)
+        ax.fill_betweenx(x,p,-v+p,facecolor='y',alpha=0.3)
+    if bp:
+        ax.boxplot(data,notch=1,positions=pos,vert=1)
 
 def main(args):
     trainTripletsFile = open('txTripletsCounts.txt', 'rU')
@@ -149,17 +183,61 @@ def main(args):
     from sklearn.cluster import KMeans
     if args[0] == "-k":
         n_clusters = 10
+
+        k_range = {10, 12, 17, 20}
+        k_means_var = [KMeans(n_clusters = k).fit(ABinLDA) for k in k_range]
+        centroids = [X.cluster_centers_ for X in k_means_var]
+        
+        k_euclid = [cdist(ABinLDA, cent, 'euclidean') for cent in centroids]
+        dist = [np.min(ke,axis=1) for ke in k_euclid]
+        wcss = [sum(d**3) for d in dist]
+        tss = sum(pdist(ABinLDA)**2)/ABinLDA.shap
+        bss = tss - wcss
+        print bss
+
         k_means = KMeans(n_clusters)
-        k_means.fit(ACountRow)
+        k_means.fit(ABinLDA)
         labels = k_means.labels_
         centers = k_means.cluster_centers_
 
-        #Printing out the labels for each of the giver addresses
-        for i in range(10):
-            print labels[i]
+        probInteraction = []
 
-        #Printing out the coordinates for the cluster centers
-        print centers
+        print "------"
+        print len(row)
+        print labels.shape
+        print labels
+        print centers.shape
+
+        for j in range(len(testRow)):
+            label = labels[testRow[j]]
+            meanInteraction = centers[label]
+            if meanInteraction[testCol[j]] > 0.2:
+                print meanInteraction[testCol[j]]
+            probInteraction.append(meanInteraction[testCol[j]])
+
+        zeroProb = []
+        oneProb = []
+        #Let's partition the probabilites into 0 and 1 and make the violin plot
+        for i in range(len(testDat)):
+            if testDat[i] == 0:
+                zeroProb.append(probInteraction[i])
+            else:
+                oneProb.append(probInteraction[i])
+
+        #Function to draw the violin plots
+        # groups = range(2)
+        # a = np.array(zeroProb)
+        # b = np.array(oneProb)
+        # data = []
+        
+        # data.append(a)
+        # data.append(b)
+        # fig = pl.figure()
+        # ax = fig.add_subplot(111)
+        # violin_plot(ax,data,groups,bp=0)
+        # pl.show()
+
+        pr(testDat, probInteraction)
 
     #NMF - used instead of factor analysis because we run out of memory
     from sklearn.decomposition import ProjectedGradientNMF
@@ -171,7 +249,7 @@ def main(args):
         # print "nmf shape: " + str(nmf.components_.shape)
         # print "nmf reconstruction_err: " + str(nmf.reconstruction_err_)
         
-        nmf = nimfa.Nmf(ACountRow)#, max_iter=200, rank=2, update='euclidean', objective='fro')
+        nmf = nimfa.Nmf(ACountRow)#, max_iter=10, rank=2)#, update='euclidean', objective='fro')
         nmf_fit = nmf()
         
         #W = nmf_fit.basis()
@@ -190,7 +268,7 @@ def main(args):
     #GMM - don't know if this is the best method but might as well give it a try
     #Assuming Gaussian is probably not the best idea but what else are we going to do? YOLO
     if args[0] == "-bmf":
-        bmf = nimfa.Bmf(V, seed="nndsvd", rank=10, max_iter=12, lambda_w=1.1, lambda_h=1.1)
+        bmf = nimfa.Bmf(ABinLDA)
         bmf_fit = bmf()
 
     #Performing cosine similarity-----------
