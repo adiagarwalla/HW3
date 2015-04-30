@@ -1,0 +1,180 @@
+10
+INFO:lda:n_documents: 444075
+INFO:lda:vocab_size: 444075
+INFO:lda:n_words: 15821903
+INFO:lda:n_topics: 10
+INFO:lda:n_iter: 100
+WARNING:lda:all zero row in document-term matrix found
+WARNING:lda:all zero column in document-term matrix found
+INFO:lda:<0> log likelihood: -165412061
+INFO:lda:<10> log likelihood: -118864981
+INFO:lda:<20> log likelihood: -111584766
+INFO:lda:<30> log likelihood: -109979021
+INFO:lda:<40> log likelihood: -109191349
+INFO:lda:<50> log likelihood: -108421305
+INFO:lda:<60> log likelihood: -107791054
+INFO:lda:<70> log likelihood: -107596087
+INFO:lda:<80> log likelihood: -107473077
+INFO:lda:<90> log likelihood: -107369852
+INFO:lda:<99> log likelihood: -107269805
+-107269804.959
+15
+INFO:lda:n_documents: 444075
+INFO:lda:vocab_size: 444075
+INFO:lda:n_words: 15821903
+INFO:lda:n_topics: 15
+INFO:lda:n_iter: 100
+WARNING:lda:all zero row in document-term matrix found
+WARNING:lda:all zero column in document-term matrix found
+INFO:lda:<0> log likelihood: -172194960
+INFO:lda:<10> log likelihood: -118233010
+INFO:lda:<20> log likelihood: -110867026
+INFO:lda:<30> log likelihood: -108660904
+INFO:lda:<40> log likelihood: -107634504
+INFO:lda:<50> log likelihood: -106967056
+INFO:lda:<60> log likelihood: -106563100
+INFO:lda:<70> log likelihood: -106318947
+INFO:lda:<80> log likelihood: -106114974
+INFO:lda:<90> log likelihood: -105924196
+INFO:lda:<99> log likelihood: -105753012
+-105753011.829
+20
+INFO:lda:n_documents: 444075
+INFO:lda:vocab_size: 444075
+INFO:lda:n_words: 15821903
+INFO:lda:n_topics: 20
+INFO:lda:n_iter: 100
+WARNING:lda:all zero row in document-term matrix found
+WARNING:lda:all zero column in document-term matrix found
+INFO:lda:<0> log likelihood: -176930498
+INFO:lda:<10> log likelihood: -119674043
+INFO:lda:<20> log likelihood: -112601250
+INFO:lda:<30> log likelihood: -110658088
+INFO:lda:<40> log likelihood: -109323914
+INFO:lda:<50> log likelihood: -108635408
+INFO:lda:<60> log likelihood: -108149429
+INFO:lda:<70> log likelihood: -107791751
+INFO:lda:<80> log likelihood: -107501019
+INFO:lda:<90> log likelihood: -107239070
+INFO:lda:<99> log likelihood: -107077383
+-107077383.268
+25
+INFO:lda:n_documents: 444075
+INFO:lda:vocab_size: 444075
+INFO:lda:n_words: 15821903
+INFO:lda:n_topics: 25
+INFO:lda:n_iter: 100
+WARNING:lda:all zero row in document-term matrix found
+WARNING:lda:all zero column in document-term matrix found
+INFO:lda:<0> log likelihood: -180569352
+INFO:lda:<10> log likelihood: -122103332
+INFO:lda:<20> log likelihood: -115470340
+INFO:lda:<30> log likelihood: -113612223
+INFO:lda:<40> log likelihood: -112423871
+INFO:lda:<50> log likelihood: -111309835
+INFO:lda:<60> log likelihood: -110221407
+INFO:lda:<70> log likelihood: -109313801
+INFO:lda:<80> log likelihood: -108538246
+INFO:lda:<90> log likelihood: -107670001
+INFO:lda:<99> log likelihood: -106690345
+-106690344.512
+30
+INFO:lda:n_documents: 444075
+INFO:lda:vocab_size: 444075
+INFO:lda:n_words: 15821903
+INFO:lda:n_topics: 30
+INFO:lda:n_iter: 100
+WARNING:lda:all zero row in document-term matrix found
+WARNING:lda:all zero column in document-term matrix found
+INFO:lda:<0> log likelihood: -183542159
+INFO:lda:<10> log likelihood: -121259212
+INFO:lda:<20> log likelihood: -112716061
+INFO:lda:<30> log likelihood: -109571795
+INFO:lda:<40> log likelihood: -108154546
+INFO:lda:<50> log likelihood: -107316877
+INFO:lda:<60> log likelihood: -106764713
+INFO:lda:<70> log likelihood: -106432074
+INFO:lda:<80> log likelihood: -106208437
+INFO:lda:<90> log likelihood: -106029056
+INFO:lda:<99> log likelihood: -105883515
+-105883514.756
+35
+INFO:lda:n_documents: 444075
+INFO:lda:vocab_size: 444075
+INFO:lda:n_words: 15821903
+INFO:lda:n_topics: 35
+INFO:lda:n_iter: 100
+WARNING:lda:all zero row in document-term matrix found
+WARNING:lda:all zero column in document-term matrix found
+INFO:lda:<0> log likelihood: -186063565
+INFO:lda:<10> log likelihood: -121626084
+INFO:lda:<20> log likelihood: -113336486
+INFO:lda:<30> log likelihood: -110896706
+INFO:lda:<40> log likelihood: -109620236
+INFO:lda:<50> log likelihood: -108625964
+INFO:lda:<60> log likelihood: -107756273
+INFO:lda:<70> log likelihood: -107178495
+INFO:lda:<80> log likelihood: -106876133
+INFO:lda:<90> log likelihood: -106648814
+INFO:lda:<99> log likelihood: -106405768
+-106405767.622
+40
+INFO:lda:n_documents: 444075
+INFO:lda:vocab_size: 444075
+INFO:lda:n_words: 15821903
+INFO:lda:n_topics: 40
+INFO:lda:n_iter: 100
+WARNING:lda:all zero row in document-term matrix found
+WARNING:lda:all zero column in document-term matrix found
+INFO:lda:<0> log likelihood: -188242318
+INFO:lda:<10> log likelihood: -124736011
+INFO:lda:<20> log likelihood: -117065525
+INFO:lda:<30> log likelihood: -113158859
+INFO:lda:<40> log likelihood: -111021812
+INFO:lda:<50> log likelihood: -110041368
+INFO:lda:<60> log likelihood: -109437327
+INFO:lda:<70> log likelihood: -108903118
+INFO:lda:<80> log likelihood: -108454136
+INFO:lda:<90> log likelihood: -108030599
+INFO:lda:<99> log likelihood: -107587812
+-107587811.585
+45
+INFO:lda:n_documents: 444075
+INFO:lda:vocab_size: 444075
+INFO:lda:n_words: 15821903
+INFO:lda:n_topics: 45
+INFO:lda:n_iter: 100
+WARNING:lda:all zero row in document-term matrix found
+WARNING:lda:all zero column in document-term matrix found
+INFO:lda:<0> log likelihood: -190163407
+INFO:lda:<10> log likelihood: -125612829
+INFO:lda:<20> log likelihood: -116424969
+INFO:lda:<30> log likelihood: -113059285
+INFO:lda:<40> log likelihood: -111128572
+INFO:lda:<50> log likelihood: -109979055
+INFO:lda:<60> log likelihood: -109171629
+INFO:lda:<70> log likelihood: -108504620
+INFO:lda:<80> log likelihood: -107917625
+INFO:lda:<90> log likelihood: -107442584
+INFO:lda:<99> log likelihood: -107012770
+-107012770.02
+50
+INFO:lda:n_documents: 444075
+INFO:lda:vocab_size: 444075
+INFO:lda:n_words: 15821903
+INFO:lda:n_topics: 50
+INFO:lda:n_iter: 100
+WARNING:lda:all zero row in document-term matrix found
+WARNING:lda:all zero column in document-term matrix found
+INFO:lda:<0> log likelihood: -191890936
+INFO:lda:<10> log likelihood: -126583863
+INFO:lda:<20> log likelihood: -117352409
+INFO:lda:<30> log likelihood: -113813607
+INFO:lda:<40> log likelihood: -112291476
+INFO:lda:<50> log likelihood: -111173952
+INFO:lda:<60> log likelihood: -110074684
+INFO:lda:<70> log likelihood: -109145563
+INFO:lda:<80> log likelihood: -108305801
+INFO:lda:<90> log likelihood: -107612119
+INFO:lda:<99> log likelihood: -107079281
+-107079280.526
