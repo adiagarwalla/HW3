@@ -166,6 +166,15 @@ def main(args):
         tfidf_matrix = tfidf_transformer.fit_transform(ACountRow)
         print tfidf_matrix.shape
         results = []
+        # x = cosine_similarity(tfidf_matrix[30:31], tfidf_matrix)
+        # max_thousand_index = np.argsort(x[0])[-26:][::-1]
+        # max_thousand_index_new = max_thousand_index[1:]
+        # max_thousand = heapq.nlargest(26, x[0])
+        # new_max_thousand = max_thousand[1:]
+        # print max_thousand_index
+        # print max_thousand
+
+
         for i, value in enumerate(testRow):
             # print value
             x = cosine_similarity(tfidf_matrix[value:value+1], tfidf_matrix)
