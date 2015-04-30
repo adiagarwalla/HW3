@@ -217,33 +217,30 @@ def main(args):
     
     #Choosing K in KMeans
     if args[0] == "-kC":
-        K = [10, 50, 100, 200, 250]
+        K = [50]
         print "Fitting the data..."
         k_means_var = [KMeans(n_clusters = k).fit(ABinLDA) for k in K]
         print "Extracting the centroids..."
         inertias = [(X.inertia_ / 444075) for X in k_means_var] #averaged
         print inertias
 
-        plt.plot(K, inertias)
-        plt.show()
+        # plt.plot(K, inertias)
+        # plt.show()
 
 
     #Performing KMeans-------------------
     if args[0] == "-k":
-        n_clusters = 10
+        n_clusters = 35
 
         k_means = KMeans(n_clusters)
         k_means.fit(ABinLDA)
         labels = k_means.labels_
         centers = k_means.cluster_centers_
+        
+        for row in centers:
+            print np.argmax(row)
 
         probInteraction = []
-
-        print "------"
-        print len(row)
-        print labels.shape
-        print labels
-        print centers.shape
 
         for j in range(len(testRow)):
             label = labels[testRow[j]]
@@ -274,7 +271,7 @@ def main(args):
         # violin_plot(ax,data,groups,bp=0)
         # pl.show()
 
-        pr(testDat, probInteraction)
+        #pr(testDat, probInteraction)
 
     #NMF - used instead of factor analysis because we run out of memory
     #from sklearn.decomposition import ProjectedGradientNMF

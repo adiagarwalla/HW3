@@ -21,7 +21,7 @@ def main(args):
     sorted_freq = sorted(freq.items(), key=operator.itemgetter(1))
     sorted_freqGiver = sorted(freqGiver.items(), key=operator.itemgetter(1))
     #sorted_dict = dict(sorted_freq)
-    for i in range(length, length - 50, -1): 
+    for i in range(length, length - 500, -1): 
         print sorted_freq[i - 1]
 
     print "----------------------"
