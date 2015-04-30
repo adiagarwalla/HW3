@@ -123,7 +123,7 @@ def main(args):
     
         for i, value in enumerate(testRow):
             sumC = 0
-            for k in range(20):
+            for k in range(15):
                 sumC += doc_topic[value][k] * topic_word[k][testCol[i]]
             results.append(sumC)
     
