@@ -15,11 +15,15 @@ import nimfa
 import pylab as pl
 from scipy import stats
 from scipy.spatial.distance import cdist, pdist
+from sklearn.cluster import KMeans
+from scipy.cluster.vq import kmeans,vq
+from scipy.spatial.distance import cdist
 
 #Function to plot precision_recall curve
 def pr(y_true, y_prob):
     import numpy as np
     from sklearn.metrics import precision_recall_curve
+
     precision, recall, thresholds = precision_recall_curve(y_true, y_prob)
     plt.clf()
     plt.plot(recall, precision, label='Precision-Recall curve')
@@ -29,6 +33,28 @@ def pr(y_true, y_prob):
     plt.xlim([0.0, 1.0])
     plt.legend(loc="lower left")
     plt.show()
+
+    return (precision, recall, thresholds)
+
+#Function for plotting ROC curves
+def ROC(cmetric, yTest):
+    fpr, tpr, thresholds = roc_curve(yTest, cmetric[:, 1])
+    roc_auc = auc(fpr, tpr)
+    print "Area under the ROC curve : %f" % roc_auc
+
+    #Plotting the ROC
+    '''pl.clf()
+    pl.plot(fpr, tpr, label='ROC curve (area = %0.2f)' % roc_auc)
+    pl.plot([0, 1], [0, 1], 'k--')
+    pl.xlim([0.0, 1.0])
+    pl.ylim([0.0, 1.0])
+    pl.xlabel('False Positive Rate')
+    pl.ylabel('True Positive Rate')
+    pl.title('Receiver operating characteristic example')
+    pl.legend(loc="lower right")
+    pl.show()'''
+
+    return (fpr, tpr)
 
 #Function for violinp lot
 def violin_plot(ax,data,groups,bp=False):
@@ -188,22 +214,45 @@ def main(args):
         # for n in range(10):
         #   print doc_topic[n]
     
+    #Choosing K in KMeans
+    if args[0] == "-kC":
+        K = {10, 15, 20, 30}
+#        ex = csr_matrix([1,2,3])
+        print "Fitting the data..."
+        k_means_var = [KMeans(n_clusters = k).fit(ABinLDA) for k in K]
+        print "Extracting the centroids..."
+        centroids = [X.cluster_centers_ for X in k_means_var]
+
+        print "---------------"
+        print "centroid:"
+        print centroids
+        
+        D_k = [cdist(binMatrix, cent, 'euclidean') for cent in centroids]
+        print "Gets past D_k"
+        cIdx = [np.argmin(D,axis=1) for D in D_k]
+        print "Gets past cIdx"
+        dist = [np.min(D,axis=1) for D in D_k]
+        print "Gets past dist"
+        avgWithinSS = [sum(d)/binMatrix.shape[0] for d in dist]
+        print "avgWithinSS"
+
+        #Let's actually make the plot
+        kIdx = 2
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        ax.plot(K, avgWithinSS, 'b*-')
+        ax.plot(K[kIdx], avgWithinSS[kIdx], marker='o', markersize=12, 
+            markeredgewidth=2, markeredgecolor='r', markerfacecolor='None')
+        plt.grid(True)
+        plt.xlabel('Number of clusters')
+        plt.ylabel('Average within-cluster sum of squares')
+        plt.title('Elbow for KMeans clustering')
+        plt.show()
+
+
     #Performing KMeans-------------------
-    #TODO: Try finding best values for k
-    from sklearn.cluster import KMeans
     if args[0] == "-k":
         n_clusters = 10
-
-        k_range = {10, 12, 17, 20}
-        k_means_var = [KMeans(n_clusters = k).fit(ABinLDA) for k in k_range]
-        centroids = [X.cluster_centers_ for X in k_means_var]
-        
-        k_euclid = [cdist(ABinLDA, cent, 'euclidean') for cent in centroids]
-        dist = [np.min(ke,axis=1) for ke in k_euclid]
-        wcss = [sum(d**3) for d in dist]
-        tss = sum(pdist(ABinLDA)**2)/ABinLDA.shap
-        bss = tss - wcss
-        print bss
 
         k_means = KMeans(n_clusters)
         k_means.fit(ABinLDA)
@@ -250,7 +299,7 @@ def main(args):
         pr(testDat, probInteraction)
 
     #NMF - used instead of factor analysis because we run out of memory
-    from sklearn.decomposition import ProjectedGradientNMF
+    #from sklearn.decomposition import ProjectedGradientNMF
     if args[0] == "-nmf":
         # nmf = ProjectedGradientNMF(n_components=1000, init='random', random_state=0, sparseness='data')
         # nmf.fit(ACountRow)
