@@ -138,16 +138,16 @@ def main(args):
     # #     p = np.multiply(x, col)
 
     ABinLDA = csr_matrix((datBin, (row, col)), shape=(444075, 444075))
-    print ABinLDA.shape
+    # print ABinLDA.shape
     ACountRow = csr_matrix((dat, (row, col)), shape=(444075, 444075))
     Test = csr_matrix((testDat, (testRow, testCol)), shape=(444075, 444075))
 
     #Performing LDA over range of topics----------------------
     if args[0] == "-t":
-        for topics in range(10, 30, 5):
+        for topics in range(10, 51, 5):
+            print topics
             model = lda.LDA(n_topics=topics, n_iter=100, random_state=1)
             model.fit(ACountRow)
-            print topics
             print model.loglikelihood()
 
 
@@ -184,7 +184,7 @@ def main(args):
         # for n in range(10):
         #     # print doc_topic[n]
     
-        model = lda.LDA(n_topics=20, n_iter=100, random_state=1)
+        model = lda.LDA(n_topics=15, n_iter=100)
         model.fit(ACountRow)
         topic_word = model.topic_word_
         doc_topic = model.doc_topic_
@@ -193,12 +193,12 @@ def main(args):
     
         for i, value in enumerate(testRow):
             sumC = 0
-            for k in range(20):
+            for k in range(15):
                 sumC += doc_topic[value][k] * topic_word[k][testCol[i]]
             results.append(sumC)
     
         print results
-        print model.loglikelihood()
+        #print model.loglikelihood()
         if len(results) != 10000:
             print "lol"
 
