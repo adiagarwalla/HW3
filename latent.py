@@ -19,6 +19,7 @@ from sklearn.cluster import KMeans
 from scipy.cluster.vq import kmeans,vq
 from scipy.spatial.distance import cdist
 
+
 #Function to plot precision_recall curve
 def pr(y_true, y_prob):
     import numpy as np
@@ -216,37 +217,14 @@ def main(args):
     
     #Choosing K in KMeans
     if args[0] == "-kC":
-        K = {10, 15, 20, 30}
-#        ex = csr_matrix([1,2,3])
+        K = [10, 50, 100, 200, 250]
         print "Fitting the data..."
         k_means_var = [KMeans(n_clusters = k).fit(ABinLDA) for k in K]
         print "Extracting the centroids..."
-        centroids = [X.cluster_centers_ for X in k_means_var]
+        inertias = [(X.inertia_ / 444075) for X in k_means_var] #averaged
+        print inertias
 
-        print "---------------"
-        print "centroid:"
-        print centroids
-        
-        D_k = [cdist(binMatrix, cent, 'euclidean') for cent in centroids]
-        print "Gets past D_k"
-        cIdx = [np.argmin(D,axis=1) for D in D_k]
-        print "Gets past cIdx"
-        dist = [np.min(D,axis=1) for D in D_k]
-        print "Gets past dist"
-        avgWithinSS = [sum(d)/binMatrix.shape[0] for d in dist]
-        print "avgWithinSS"
-
-        #Let's actually make the plot
-        kIdx = 2
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        ax.plot(K, avgWithinSS, 'b*-')
-        ax.plot(K[kIdx], avgWithinSS[kIdx], marker='o', markersize=12, 
-            markeredgewidth=2, markeredgecolor='r', markerfacecolor='None')
-        plt.grid(True)
-        plt.xlabel('Number of clusters')
-        plt.ylabel('Average within-cluster sum of squares')
-        plt.title('Elbow for KMeans clustering')
+        plt.plot(K, inertias)
         plt.show()
 
 
@@ -362,9 +340,6 @@ def main(args):
             
         print len(results)
         print bigCount
-        
-
-
 
 if __name__ == "__main__":
     main(sys.argv[1:])
